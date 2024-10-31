@@ -1,9 +1,11 @@
-class_name PushBox
+class_name SpeedupPushZone
 extends CameraControllerBase
 
-
-@export var box_width:float = 10.0
-@export var box_height:float = 10.0
+@export var push_ratio:float = 0.75
+@export var pushbox_top_left := Vector2(-5, -5)
+@export var pushbox_bottom_right := Vector2(5, 5)
+@export var speedup_zone_top_left := Vector2(-4, -4)
+@export var speedup_zone_bottom_right := Vector2(4, 4)
 
 
 func _ready() -> void:

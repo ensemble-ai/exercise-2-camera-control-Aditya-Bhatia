@@ -1,9 +1,13 @@
-class_name PositionLockLerp
+class_name LerpTargetFocus
 extends CameraControllerBase
 
-# follow_speed is a ratio of the target's velocity
+var _catchup_timer: float = 0.0
+
+# lead_speed is a ratio of the target's velocity
+# catchup_delay_duration is in seconds
 # catchup_speed is also a multiplier that has min 0 and max 1
-@export_range(0, 1, 0.05) var follow_speed:float = 0.75
+@export var lead_speed:float = 1.5
+@export var catchup_delay_duration:float = 0.5
 @export_range(0, 1, 0.05) var catchup_speed:float = 0.5
 @export var leash_distance:float = 5
 
@@ -21,20 +25,29 @@ func _process(delta: float) -> void:
 		draw_logic()
 
 	super(delta)
-
+ 
 
 func _physics_process(delta: float) -> void:
 	if target.velocity == Vector3(0, 0, 0) and position != target.position:
+		if _catchup_timer > 0:
+			_catchup_timer -= delta
+			return
+
 		var cpos = position
 		position = cpos.lerp(target.position, 0.15 * catchup_speed)
+		return
 	
 	var cpos_xz = Vector2(position.x, position.z)
-	var tpos_xz = Vector2(target.position.x, target.position.z)
-	
-	if cpos_xz.distance_to(tpos_xz) > leash_distance:
-		position += target.velocity * delta
+	var desired_position = target.position + target.velocity.normalized() * leash_distance
+	var dpos_xz = Vector2(desired_position.x, desired_position.z)
+	var tvel_xz = Vector2(target.velocity.x, target.velocity.z)
+
+	if (dpos_xz - cpos_xz).dot(tvel_xz) < 0:
+		position = position.lerp(desired_position, 0.15 * catchup_speed)
 	else:
-		position += target.velocity * follow_speed * delta
+		position += target.velocity * lead_speed * delta
+
+	_catchup_timer = catchup_delay_duration
 
 
 func draw_logic() -> void:

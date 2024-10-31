@@ -65,58 +65,58 @@ func draw_logic() -> void:
 	mesh_instance.global_transform = Transform3D.IDENTITY
 	mesh_instance.global_position = Vector3(global_position.x, target.global_position.y, global_position.z)
 	
-	#mesh is freed after one update of _process
+	# mesh is freed after one update of _process
 	await get_tree().process_frame
 	mesh_instance.queue_free()
 
 
 func _boundary_checks(tpos, cpos) -> void:
-	#boundary checks
+	# boundary checks
 	var diff_between_left_edges = (tpos.x - target.WIDTH / 2.0) - (cpos.x - abs(bottom_right.x))
 	var diff_between_right_edges = (tpos.x + target.WIDTH / 2.0) - (cpos.x + abs(bottom_right.x))
 	var diff_between_bottom_edges = (tpos.z + target.HEIGHT / 2.0) - (cpos.z + abs(bottom_right.y))
 	var diff_between_top_edges = (tpos.z - target.HEIGHT / 2.0) - (cpos.z - abs(bottom_right.y))
 	
 	if autoscroll_speed.x > 0:
-		#left
+		# left
 		if diff_between_left_edges < 0:
 			target.global_position.x -= diff_between_left_edges
-		#right
+		# right
 		if diff_between_right_edges > 0:
 			target.global_position.x = cpos.x + abs(bottom_right.x) - target.WIDTH / 2.0
 	elif autoscroll_speed.x < 0:
-		#right
+		# right
 		if diff_between_right_edges > 0:
 			target.global_position.x -= diff_between_right_edges
-		#left
+		# left
 		if diff_between_left_edges < 0:
 			target.global_position.x = cpos.x - abs(bottom_right.x) + target.WIDTH / 2.0
 	else:
-		#left
+		# left
 		if diff_between_left_edges < 0:
 			target.global_position.x = cpos.x - abs(bottom_right.x) + target.WIDTH / 2.0
-		#right
+		# right
 		if diff_between_right_edges > 0:
 			target.global_position.x = cpos.x + abs(bottom_right.x) - target.WIDTH / 2.0
 	
 	if autoscroll_speed.z < 0:
-		#bottom
+		# bottom
 		if diff_between_bottom_edges > 0:
 			target.global_position.z -= diff_between_bottom_edges
-		#top
+		# top
 		if diff_between_top_edges < 0:
 			target.global_position.z = cpos.z - abs(bottom_right.y) + target.HEIGHT / 2.0
 	elif autoscroll_speed.z > 0:
-		#top
+		# top
 		if diff_between_top_edges < 0:
 			target.global_position.z -= diff_between_top_edges
-		#bottom
+		# bottom
 		if diff_between_bottom_edges > 0:
 			target.global_position.z = cpos.z + abs(bottom_right.y) - target.HEIGHT / 2.0
 	else:
-		#bottom
+		# bottom
 		if diff_between_bottom_edges > 0:
 			target.global_position.z = cpos.z + abs(bottom_right.y) - target.HEIGHT / 2.0
-		#top
+		# top
 		if diff_between_top_edges < 0:
 			target.global_position.z = cpos.z - abs(bottom_right.y) + target.HEIGHT / 2.0
