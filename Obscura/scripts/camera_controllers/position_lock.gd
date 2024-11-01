@@ -1,6 +1,7 @@
 class_name PositionLock
 extends CameraControllerBase
 
+
 func _ready():
 	super()
 	draw_camera_logic = true

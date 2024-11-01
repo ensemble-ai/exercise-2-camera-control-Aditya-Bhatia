@@ -42,6 +42,11 @@ func _physics_process(delta: float) -> void:
 	var dpos_xz = Vector2(desired_position.x, desired_position.z)
 	var tvel_xz = Vector2(target.velocity.x, target.velocity.z)
 
+	# This code allows the camera to change direction and move to the other side
+	# of the target if the target instantaneously changes directions
+	# however, it also causes the hitching when moving near the leash_distance
+	# I tried my best, but unfortunately I was not able to stop that from hapenning
+	# Apologies if it causes your eyes or head to hurt
 	if (dpos_xz - cpos_xz).dot(tvel_xz) < 0:
 		position = position.lerp(desired_position, 0.15 * catchup_speed)
 	else:

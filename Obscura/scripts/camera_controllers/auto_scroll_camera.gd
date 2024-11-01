@@ -6,6 +6,7 @@ extends CameraControllerBase
 @export var bottom_right:Vector2 = Vector2(5, 5)
 @export var autoscroll_speed:Vector3 = Vector3(5, 0, 0)
 
+
 func _ready() -> void:
 	super()
 	draw_camera_logic = true
